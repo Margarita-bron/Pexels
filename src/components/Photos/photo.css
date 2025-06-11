@@ -1,0 +1,23 @@
+.photo-img{
+  width: 100%;
+  border-radius: 8px;
+}
+
+.photos-wrapper{
+  height: 70vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.loading, .error-loading{
+  margin-top: 20px
+}
+
+.search-input{
+  margin-bottom: 20px;
+  padding: 8px;
+  width: 100%;
+  min-width: 400px;
+}

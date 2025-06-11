@@ -58,19 +58,19 @@ const eslintConfig = config(
     name: 'main',
     rules: {
       'no-undef': 0,
-      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      //'@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-assertions': [
         'error',
         { assertionStyle: 'never' },
       ],
-      '@typescript-eslint/consistent-type-imports': [
+      /*'@typescript-eslint/consistent-type-imports': [
         'error',
         {
           prefer: 'type-imports',
           fixStyle: 'separate-type-imports',
           disallowTypeAnnotations: true,
         },
-      ],
+      ],*/
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-member-accessibility': [
         'error',
@@ -79,7 +79,9 @@ const eslintConfig = config(
       '@typescript-eslint/member-ordering': 'error',
       'class-methods-use-this': 'error',
       'unicorn/no-null': 'off',
+      'unicorn/prefer-spread': 'off',
       'unicorn/no-document-cookie': 'off',
+      'unicorn/filename-case': 'off',
       /*'no-restricted-imports': [
         'error',
         {
