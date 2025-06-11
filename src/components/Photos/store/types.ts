@@ -1,28 +1,16 @@
-/*
-  src: {
-    original: string;
-    large2x: string;
-    large: string;
-    medium: string;
-    small: string;
-    portrait: string;
-    landscape: string;
-    tiny: string;
-}*/
-
-export interface IPhotoSource {
+export interface IPhotoSize {
   original: string;
-  large2x: string;
-  large: string;
+  //large2x: string;
+  //large: string;
   medium: string;
-  small: string;
+  //small: string;
   portrait: string;
   landscape: string;
   tiny: string;
 }
 
 export interface IPhoto {
-  src: IPhotoSource;
+  src: IPhotoSize;
   photographer: string | undefined;
   id: string;
   author: string;
@@ -34,6 +22,8 @@ export interface IPhoto {
 
 export interface PhotoImage {
   photo: IPhoto;
+  size: keyof IPhotoSize;
+  aspectRatio?: string;
 }
 
 export interface IPhotosState {

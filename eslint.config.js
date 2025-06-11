@@ -82,6 +82,7 @@ const eslintConfig = config(
       'unicorn/prefer-spread': 'off',
       'unicorn/no-document-cookie': 'off',
       'unicorn/filename-case': 'off',
+      'unicorn/prefer-at': 'off',
       /*'no-restricted-imports': [
         'error',
         {

@@ -5,11 +5,12 @@ import {
 } from './store/slices';
 import { PER_PAGE } from './constants';
 import './photo.css';
-import { PhotoImage } from './store/types';
+import { IPhoto, IPhotoSize, PhotoImage } from './store/types';
 
 const Photos: React.FC = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [allPhotos, setAllPhotos] = useState<IPhoto[]>([]);
 
   const {
     data: curatedData,
@@ -31,14 +32,24 @@ const Photos: React.FC = () => {
     { skip: search.length === 0 },
   );
 
-  useEffect(() => {
-    setPage(1);
-  }, [search]);
-
   const photos =
     search.length > 0
       ? (searchData?.photos ?? [])
       : (curatedData?.photos ?? []);
+
+  useEffect(() => {
+    if (page === 1) {
+      setAllPhotos(photos);
+    } else {
+      setAllPhotos((previous) => {
+        const newPhotos = photos.filter(
+          (p) => !previous.some((previousP) => previousP.id === p.id),
+        );
+        return [...previous, ...newPhotos];
+      });
+    }
+  }, [photos, page]);
+
   const isLoading = search.length > 0 ? isSearchLoading : isCuratedLoading;
   const isFetching = search.length > 0 ? isSearchFetching : isCuratedFetching;
   const error = search.length > 0 ? searchError : curatedError;
@@ -72,9 +83,31 @@ const Photos: React.FC = () => {
     [isFetching],
   );
 
-  const PhotoImage: React.FC<PhotoImage> = ({ photo }) => {
-    return <img src={photo.src.medium} alt={photo.photographer} />;
+  const PhotoImage: React.FC<PhotoImage> = ({
+    photo,
+    size /*aspectRatio*/,
+  }) => {
+    return (
+      <img
+        style={{
+          /*aspectRatio: aspectRatio,*/
+          overflow: 'hidden',
+          borderRadius: 8,
+        }}
+        src={photo.src[size]}
+        alt={photo.photographer}
+      />
+    );
   };
+  //const aspectRatios = ['3/2', '3/4'];
+  const size: (keyof IPhotoSize)[] = ['medium', 'tiny'];
+  const columns: IPhoto[][] = [[], [], []];
+  for (const [index, photo] of allPhotos.entries()) {
+    columns[index % 3].push(photo);
+  }
+
+  const lastPhotoId =
+    allPhotos.length > 0 ? allPhotos[allPhotos.length - 1].id : null;
 
   return (
     <div>
@@ -91,24 +124,26 @@ const Photos: React.FC = () => {
       {error && <p className="error-loading">Ошибка загрузки фотографий</p>}
 
       <div ref={container} className="photos-wrapper">
-        {photos.map((photo, index) => {
-          if (index === photos.length - 1) {
-            return (
-              <div
-                key={photo.id}
-                ref={lastPhotoReference}
-                className="photo-img"
-              >
-                <PhotoImage photo={photo} />
-              </div>
-            );
-          }
-          return (
-            <div key={photo.id} className="photo-img">
-              <PhotoImage photo={photo} />
-            </div>
-          );
-        })}
+        {columns.map((columnPhotos, colIndex) => (
+          <div key={colIndex} className="photo-column">
+            {columnPhotos.map((photo) => {
+              const randomIndex = Math.floor(Math.random() * size.length);
+              const randomSize = size[randomIndex];
+              const isLastPhoto = photo.id === lastPhotoId;
+              //const randomAspectRatio = aspectRatios[randomIndex % aspectRatios.length];
+
+              return (
+                <div
+                  key={photo.id}
+                  className="photo-img"
+                  ref={isLastPhoto ? lastPhotoReference : null}
+                >
+                  <PhotoImage photo={photo} size={randomSize} />
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {(isLoading || isFetching) && <p className="loading">Загрузка...</p>}

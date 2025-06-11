@@ -18,7 +18,7 @@ export const photoAPI = createApi({
       { page?: number; per_page?: number }
     >({
       query: ({ page = 1, per_page = PER_PAGE }) =>
-        `curated?page=${String(page)}&per_page=${String(per_page)}`,
+        `curated?page=${String(page)}&per_page=${String(per_page)}&lazy=load`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
@@ -36,7 +36,7 @@ export const photoAPI = createApi({
       { query: string; page?: number; per_page?: number }
     >({
       query: ({ query, page = 1, per_page = PER_PAGE }) =>
-        `search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}`,
+        `search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}&lazy=load`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
