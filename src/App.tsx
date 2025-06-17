@@ -1,11 +1,13 @@
-import { Menu } from './components/Menu/Menu';
-import Photos from './components/Photos';
-import './app.css';
+import './styles/index';
+import { Header, Menu, Photos } from './components/index';
+import HeaderContent from './components/HeaderContent/HeaderContent';
 const App: React.FC = () => {
   return (
     <div className="container">
-      <Photos />
+      <Header />
+      <HeaderContent />
       <Menu />
+      <Photos />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 export interface IPhotoSize {
   original: string;
   //large2x: string;
-  //large: string;
+  large: string;
   medium: string;
   //small: string;
   portrait: string;

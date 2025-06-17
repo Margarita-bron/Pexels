@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+h1 {
+  margin: 0;
+}
+
+a{
+  text-decoration: none;
+}
+
+span{
+  font-family: var(--font-family);
+  font-size: 17px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+}

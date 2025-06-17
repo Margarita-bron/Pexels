@@ -4,11 +4,11 @@ import {
   useSearchPhotosQuery,
 } from './store/slices';
 import { PER_PAGE } from './constants';
-import './photo.css';
+import '../../styles/index';
 import { IPhoto, IPhotoSize, PhotoImage } from './store/types';
 
-const Photos: React.FC = () => {
-  const [search, setSearch] = useState('');
+export const Photos: React.FC = () => {
+  const [search] = useState('');
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<IPhoto[]>([]);
 
@@ -88,15 +88,18 @@ const Photos: React.FC = () => {
     size /*aspectRatio*/,
   }) => {
     return (
-      <img
-        style={{
-          /*aspectRatio: aspectRatio,*/
-          overflow: 'hidden',
-          borderRadius: 8,
-        }}
-        src={photo.src[size]}
-        alt={photo.photographer}
-      />
+      <div>
+        <img
+          style={{
+            /*aspectRatio: aspectRatio,*/
+            overflow: 'hidden',
+            borderRadius: 8,
+          }}
+          src={photo.src[size]}
+          alt={photo.photographer}
+        />
+        <span>{photo.photographer}</span>
+      </div>
     );
   };
   //const aspectRatios = ['3/2', '3/4'];
@@ -111,16 +114,6 @@ const Photos: React.FC = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Поиск бесплатных изображений"
-        value={search}
-        onChange={(event) => {
-          setSearch(event.target.value);
-        }}
-        className="search-input"
-      />
-
       {error && <p className="error-loading">Ошибка загрузки фотографий</p>}
 
       <div ref={container} className="photos-wrapper">
@@ -150,5 +143,3 @@ const Photos: React.FC = () => {
     </div>
   );
 };
-
-export default Photos;
