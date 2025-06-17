@@ -12,6 +12,7 @@ export interface IPhotoSize {
 export interface IPhoto {
   src: IPhotoSize;
   photographer: string | undefined;
+  photographer_url: string;
   id: string;
   author: string;
   download_url: string;

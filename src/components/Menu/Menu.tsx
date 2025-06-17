@@ -2,17 +2,21 @@ import './menu.css';
 
 export const Menu: React.FC = () => {
   const menuElements: Record<string, string> = {
-    Главная: '/home',
-    Видео: '/video',
-    'Таблица лидеров': '/leaders',
-    Челенджи: '/challenges',
+    Home: '/home',
+    Videos: '/video',
+    Leaderboard: '/leaders',
+    Challenges: '/challenges',
   };
 
   const menuItems = Object.entries(menuElements).map(([name, link]) => (
-    <a key={name} href={link} className="main-menu-item">
+    <a
+      key={name}
+      href={link}
+      className={`main-menu-item${name === 'Home' ? ' main-menu-item_active' : ''}`}
+    >
       {name}
     </a>
   ));
 
-  return <nav>{menuItems}</nav>;
+  return <nav className="main-menu-wrapper">{menuItems}</nav>;
 };

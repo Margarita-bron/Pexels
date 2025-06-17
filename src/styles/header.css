@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 100vw;
     min-height: 500px;
     padding: 80px 15px;
     box-sizing: border-box;
@@ -11,7 +11,7 @@
     background-position: 'center';
     background-repeat: 'no-repeat';
 
-    mix-blend-mode: overlay;
+    position: relative;
 }
 
 .header-navbar{
@@ -24,6 +24,7 @@
     box-sizing: border-box;
 
     background-color: transparent;
+    z-index: 15;
 }
 
 .header-navbar_menu{
@@ -178,6 +179,7 @@ svg {
 .button_white-color{
     color: #191919;
     background: #fff;
+    border: 1px solid;
     border-color: #ededed;
 }
 
@@ -191,6 +193,13 @@ svg {
     box-sizing: border-box;
     cursor: pointer;
     height: 50px;
+}
+
+@media (min-width: 0) and (max-width: 650px) {
+    .button-small-650_height-40 {
+        height: 40px;
+        font-size: 16px;
+    }
 }
 
 .navbar-avatar{
@@ -240,4 +249,17 @@ svg {
 
 .tooltip-container, .navbar-avatar, #navbar_notification-icon, #loading-link, .navbar-menu-icon{
     display: none;
+}
+
+.photo-img_author-link{
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    opacity: .7;
+    transition: opacity .2s ease;
+    font-weight: 500;
+}
+
+.photo-by_span{
+    opacity: .6;
 }

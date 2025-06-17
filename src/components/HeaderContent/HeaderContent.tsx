@@ -63,6 +63,18 @@ const HeaderContent: React.FC = () => {
             </button>
           </div>
         </form>
+        <a
+          data-testid="author-link"
+          className="photo-img_author-link"
+          href={randomPhoto ? randomPhoto.photographer_url : ''}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="author-link_span">
+            <span className="photo-by_span">Photo by — </span>
+            {randomPhoto ? randomPhoto.photographer : ''}
+          </span>
+        </a>
       </div>
     </div>
   );

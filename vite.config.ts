@@ -7,7 +7,11 @@ export default defineConfig({
   plugins: [react()],
 
   server: {
-    open: true,
+    proxy: {
+      '/api': 'https://api.pexels.com',
+      '/fonts': 'https://fonts.gstatic.com',
+    },
+    port: 5173,
   },
 
   test: {

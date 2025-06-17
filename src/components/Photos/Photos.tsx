@@ -88,18 +88,15 @@ export const Photos: React.FC = () => {
     size /*aspectRatio*/,
   }) => {
     return (
-      <div>
-        <img
-          style={{
-            /*aspectRatio: aspectRatio,*/
-            overflow: 'hidden',
-            borderRadius: 8,
-          }}
-          src={photo.src[size]}
-          alt={photo.photographer}
-        />
-        <span>{photo.photographer}</span>
-      </div>
+      <img
+        style={{
+          /*aspectRatio: aspectRatio,*/
+          overflow: 'hidden',
+          borderRadius: 8,
+        }}
+        src={photo.src[size]}
+        alt={photo.photographer}
+      />
     );
   };
   //const aspectRatios = ['3/2', '3/4'];
