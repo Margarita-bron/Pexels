@@ -5,10 +5,11 @@ import { TITLE } from '../Header/constants';
 import { useFetchCuratedPhotosQuery } from '../Photos/store/slices';
 import React from 'react';
 import { IPhoto } from '../Photos/store/types';
+import { PER_PAGE } from '../Photos/constants';
 
 const HeaderContent: React.FC = () => {
   const [search, setSearch] = useState('');
-  const { data } = useFetchCuratedPhotosQuery({ page: 1, per_page: 30 });
+  const { data } = useFetchCuratedPhotosQuery({ page: 1, per_page: PER_PAGE });
 
   const randomPhoto: IPhoto | null = React.useMemo(() => {
     if (!data?.photos.length) return null;
@@ -19,6 +20,9 @@ const HeaderContent: React.FC = () => {
   const headerStyle = randomPhoto
     ? {
         backgroundImage: `url(${randomPhoto.src.large})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }
     : {};
 

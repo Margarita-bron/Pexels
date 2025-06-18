@@ -19,6 +19,7 @@ export interface IPhoto {
   width: number;
   height: number;
   url: string;
+  size: keyof IPhotoSize;
 }
 
 export interface PhotoImage {

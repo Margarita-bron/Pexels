@@ -7,12 +7,6 @@
     border-radius: 30px;
 }
 
-.main-menu-item_active{
-    color: #fff;
-    background: #000;
-    border: 1px solid transparent;
-}
-
 .main-menu-item:first-child{
   margin-right: 10px;
 }
@@ -22,6 +16,12 @@
     color: #000;
     background: #f7f7f7;
     outline: none;
+}
+
+.main-menu-item_active, .main-menu-item_active:hover{
+    color: #fff;
+    background: #000;
+    border: 1px solid transparent;
 }
 
 .main-menu-wrapper{

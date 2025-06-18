@@ -2,16 +2,23 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 import packageJson from './package.json' with { type: 'json' };
+import { API_KEY } from './src/components/Photos/constants';
 
 export default defineConfig({
   plugins: [react()],
 
   server: {
     proxy: {
-      '/api': 'https://api.pexels.com',
-      '/fonts': 'https://fonts.gstatic.com',
+      '/api': {
+        target: 'https://api.pexels.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        headers: {
+          Authorization: API_KEY,
+        },
+      },
     },
-    port: 5173,
+    port: 4200,
   },
 
   test: {

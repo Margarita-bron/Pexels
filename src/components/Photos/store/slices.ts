@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_KEY, API_URL, PER_PAGE } from '../constants';
+import { API_KEY, PER_PAGE } from '../constants';
 import { PexelsResponse } from './types';
 
 export const photoAPI = createApi({
   reducerPath: 'photoAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
+    baseUrl: '/api',
     prepareHeaders: (headers) => {
       headers.set('Authorization', API_KEY);
       return headers;
@@ -18,7 +18,7 @@ export const photoAPI = createApi({
       { page?: number; per_page?: number }
     >({
       query: ({ page = 1, per_page = PER_PAGE }) =>
-        `curated?page=${String(page)}&per_page=${String(per_page)}&lazy=load`,
+        `/v1/curated?page=${String(page)}&per_page=${String(per_page)}`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
@@ -36,7 +36,7 @@ export const photoAPI = createApi({
       { query: string; page?: number; per_page?: number }
     >({
       query: ({ query, page = 1, per_page = PER_PAGE }) =>
-        `search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}&lazy=load`,
+        `/v1/search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
