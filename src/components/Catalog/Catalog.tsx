@@ -2,7 +2,7 @@ import '../../styles/index';
 import { Menu } from '../Menu/Menu';
 import { Photos } from '../Photos/Photos';
 
-export const Catalog: React.FC = () => {
+export const Catalog: React.FC<{ search: string }> = ({ search }) => {
   return (
     <div className="main-page-catalog">
       <Menu />
@@ -23,7 +23,7 @@ export const Catalog: React.FC = () => {
           </span>
         </button>
       </div>
-      <Photos />
+      <Photos search={search} />
     </div>
   );
 };

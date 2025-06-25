@@ -23,6 +23,10 @@
     z-index: 15;
 }
 
+.sticky {
+    position: fixed;
+}
+
 .header-navbar_menu{
     display: flex;
     flex-direction: row;
@@ -94,6 +98,7 @@
 }
 
 .search-form_input{
+    width: 100%;
     line-height: unset;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -101,6 +106,8 @@
     background: transparent;
     border: none;
     font-size: 17px;
+
+    outline: none;
 }
 
 .search-form_button-icon

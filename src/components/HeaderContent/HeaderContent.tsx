@@ -1,21 +1,31 @@
 // import "./HeaderContent.module.css"
 
-import { useState } from 'react';
 import { TITLE } from '../Header/constants';
 import { useFetchCuratedPhotosQuery } from '../Photos/store/slices';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { IPhoto } from '../Photos/store/types';
 
-const HeaderContent: React.FC = () => {
-  const [search, setSearch] = useState('');
+export const HeaderContent: React.FC<{
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ search, setSearch }) => {
   const { data } = useFetchCuratedPhotosQuery({ page: 1, per_page: 10 });
+  const [inputValue, setInputValue] = useState(search);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    setSearch(inputValue.trim());
+  };
 
   const randomPhoto: IPhoto | null = React.useMemo(() => {
     if (!data?.photos.length) return null;
     const randomIndex = Math.floor(Math.random() * data.photos.length);
     return data.photos[randomIndex];
   }, [data]);
-
   const headerStyle = randomPhoto
     ? {
         backgroundImage: `url(${randomPhoto.src.large})`,
@@ -28,8 +38,8 @@ const HeaderContent: React.FC = () => {
   return (
     <div className="header" style={headerStyle}>
       <div className="header-content">
-        <h1 className="header-content_title">{TITLE}</h1>
-        <form role="search" autoComplete="off">
+        <h1 className="header-content_title text__color-white">{TITLE}</h1>
+        <form role="search" autoComplete="off" onSubmit={handleSubmit}>
           <div className="search-form-wrapper">
             <button type="button" className="search-form_menu-button">
               <svg viewBox="0 0 24 24" width="24" height="24">
@@ -45,10 +55,8 @@ const HeaderContent: React.FC = () => {
               id="search"
               type="search"
               placeholder="Search for free images"
-              value={search}
-              onChange={(event) => {
-                setSearch(event.target.value);
-              }}
+              value={inputValue}
+              onChange={handleInputChange}
               className="search-form_input"
             />
             <button
@@ -73,7 +81,7 @@ const HeaderContent: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="author-link_span">
+          <span className="author-link_span text__color-white">
             <span className="photo-by_span">Photo by — </span>
             {randomPhoto ? randomPhoto.photographer : ''}
           </span>
@@ -82,5 +90,3 @@ const HeaderContent: React.FC = () => {
     </div>
   );
 };
-
-export default HeaderContent;

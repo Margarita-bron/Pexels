@@ -19,13 +19,16 @@ import {
   PhotoImage,
 } from './store/types';
 
-export const Photos: React.FC = () => {
-  const [search] = useState('');
+export const Photos: React.FC<{ search: string }> = ({ search }) => {
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<
     (IPhoto & { size: keyof IPhotoSize })[]
   >([]);
   const [likedPhotoIds, setLikedPhotoIds] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   const searchParameters = useMemo<ISearchParameters>(() => {
     return { query: search, page, per_page: PER_PAGE };
@@ -47,7 +50,9 @@ export const Photos: React.FC = () => {
     isFetching: isSearchFetching,
     isLoading: isSearchLoading,
     error: searchError,
-  } = useSearchPhotosQuery(searchParameters);
+  } = useSearchPhotosQuery(searchParameters, {
+    skip: search.trim() === '',
+  });
 
   const photos =
     search.trim() === ''
@@ -158,7 +163,7 @@ export const Photos: React.FC = () => {
   const DownloadUrl: React.FC<{ photo: IPhoto }> = ({ photo }) => {
     const buttonHandle = async (): Promise<void> => {
       try {
-        const response = await fetch(photo.download_url);
+        const response = await fetch(photo.src.original);
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
         const temporaryLink = document.createElement('a');
