@@ -1,11 +1,23 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   useFetchCuratedPhotosQuery,
   useSearchPhotosQuery,
 } from './store/slices';
 import { PER_PAGE } from './constants';
 import '../../styles/index';
-import { IPhoto, IPhotoSize, PhotoImage } from './store/types';
+import {
+  IParameters,
+  IPhoto,
+  IPhotoSize,
+  ISearchParameters,
+  PhotoImage,
+} from './store/types';
 
 export const Photos: React.FC = () => {
   const [search] = useState('');
@@ -13,31 +25,34 @@ export const Photos: React.FC = () => {
   const [allPhotos, setAllPhotos] = useState<
     (IPhoto & { size: keyof IPhotoSize })[]
   >([]);
+  const [likedPhotoIds, setLikedPhotoIds] = useState<Set<number>>(new Set());
+
+  const searchParameters = useMemo<ISearchParameters>(() => {
+    return { query: search, page, per_page: PER_PAGE };
+  }, [search, page]);
+
+  const curatedParameters = useMemo<IParameters>(() => {
+    return { page, per_page: PER_PAGE };
+  }, [page]);
 
   const {
     data: curatedData,
     isFetching: isCuratedFetching,
     isLoading: isCuratedLoading,
     error: curatedError,
-  } = useFetchCuratedPhotosQuery(
-    { page, per_page: PER_PAGE },
-    { skip: search.length > 0 },
-  );
+  } = useFetchCuratedPhotosQuery(curatedParameters);
 
   const {
     data: searchData,
     isFetching: isSearchFetching,
     isLoading: isSearchLoading,
     error: searchError,
-  } = useSearchPhotosQuery(
-    { query: search, page, per_page: PER_PAGE },
-    { skip: search.length === 0 },
-  );
+  } = useSearchPhotosQuery(searchParameters);
 
   const photos =
-    search.length > 0
-      ? (searchData?.photos ?? [])
-      : (curatedData?.photos ?? []);
+    search.trim() === ''
+      ? (curatedData?.photos ?? [])
+      : (searchData?.photos ?? []);
 
   const isInitialLoading =
     search.length > 0 ? isSearchLoading : isCuratedLoading;
@@ -81,6 +96,40 @@ export const Photos: React.FC = () => {
     }
   }, [photos, page]);
 
+  useEffect(() => {
+    const stored = localStorage.getItem('likedPhotoIds');
+    if (stored) {
+      try {
+        const parsed: unknown = JSON.parse(stored);
+        if (
+          Array.isArray(parsed) &&
+          parsed.every((item) => typeof item === 'number')
+        ) {
+          setLikedPhotoIds(new Set(parsed));
+        }
+      } catch (error_) {
+        console.error(
+          'Failed to parse likedPhotoIds from localStorage',
+          error_,
+        );
+      }
+    }
+  }, []);
+
+  const toggleLike = (photoId: string): void => {
+    setLikedPhotoIds((previous) => {
+      const photo = Number(photoId);
+      const newSet = new Set(previous);
+      if (newSet.has(photo)) {
+        newSet.delete(photo);
+      } else {
+        newSet.add(photo);
+      }
+      localStorage.setItem('likedPhotoIds', JSON.stringify(Array.from(newSet)));
+      return newSet;
+    });
+  };
+
   const lastPhotoReference = useCallback(
     (node: HTMLDivElement | null) => {
       if (isFetching) return;
@@ -98,7 +147,7 @@ export const Photos: React.FC = () => {
             setPage((previous) => previous + 1);
           }
         },
-        { threshold: 0.5, root: null },
+        { threshold: 0.5 },
       );
 
       if (node) observer.current.observe(node);
@@ -106,21 +155,53 @@ export const Photos: React.FC = () => {
     [isFetching],
   );
 
+  const DownloadUrl: React.FC<{ photo: IPhoto }> = ({ photo }) => {
+    const buttonHandle = async (): Promise<void> => {
+      try {
+        const response = await fetch(photo.download_url);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const temporaryLink = document.createElement('a');
+        temporaryLink.href = objectUrl;
+        temporaryLink.download = `photo-${photo.id}.jpg`;
+        document.body.append(temporaryLink);
+        temporaryLink.click();
+        temporaryLink.remove();
+
+        URL.revokeObjectURL(objectUrl);
+      } catch (error) {
+        console.error('download failed', error);
+      }
+    };
+    return (
+      <button
+        title="Download"
+        className="button download-button"
+        onClick={() => {
+          void buttonHandle();
+        }}
+      >
+        <span className="download-button-container">
+          <svg
+            className="download-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+          >
+            <path d="m12 17.5-6.875-6.875L7.05 8.63125l3.575 3.57505V1h2.75v11.2063l3.575-3.57505 1.925 1.99375L12 17.5ZM3.75 23c-.75625 0-1.40365-.2693-1.94219-.8078C1.26927 21.6536 1 21.0063 1 20.25v-4.125h2.75v4.125h16.5v-4.125H23v4.125c0 .7563-.2693 1.4036-.8078 1.9422-.5386.5385-1.1859.8078-1.9422.8078H3.75Z" />
+          </svg>
+          <span className="download-button_text">Download</span>
+        </span>
+      </button>
+    );
+  };
+
   const PhotoImage: React.FC<PhotoImage> = ({
     photo,
     size /*aspectRatio*/,
   }) => {
     return (
-      <img
-        className="photo"
-        style={{
-          /*aspectRatio: aspectRatio,*/
-          overflow: 'hidden',
-          borderRadius: 8,
-        }}
-        src={photo.src[size]}
-        alt={photo.download_url}
-      />
+      <img className="photo" src={photo.src[size]} alt={photo.photographer} />
     );
   };
   //const aspectRatios = ['3/2', '3/4'];
@@ -130,7 +211,7 @@ export const Photos: React.FC = () => {
 
   return (
     <div className="catalog">
-      {error && <p className="error-loading">Ошибка загрузки фотографий</p>}
+      {error && <p className="error-loading">Loading</p>}
 
       <div ref={container} className="photos-wrapper">
         {columns.map((columnPhotos, colIndex) => (
@@ -145,6 +226,7 @@ export const Photos: React.FC = () => {
                   ref={isLastPhoto ? lastPhotoReference : null}
                 >
                   <PhotoImage photo={photo} size={size} />
+                  <div className="overlay"></div>
                   <div className="upper-media_overlay">
                     <button
                       title="Collect"
@@ -161,10 +243,15 @@ export const Photos: React.FC = () => {
                       </svg>
                     </button>
                     <button
-                      className="media-button button"
+                      className={`media-button button ${likedPhotoIds.has(Number(photo.id)) ? 'button_color-strawberry' : ''}`}
                       aria-disabled="false"
                       title="Like"
-                      data-hoveronly="true"
+                      data-hoveronly={
+                        likedPhotoIds.has(Number(photo.id)) ? '' : 'true'
+                      }
+                      onClick={(): void => {
+                        toggleLike(photo.id);
+                      }}
                     >
                       <span className="">
                         <svg
@@ -180,23 +267,20 @@ export const Photos: React.FC = () => {
                   </div>
                   <div data-hoveronly="true" className="lower-media_overlay">
                     <a
-                      download="photo.jpg"
-                      title="Download"
-                      className="button download-button"
-                      href={photo.src.original}
+                      data-testid="next-link"
+                      title={photo.photographer}
+                      className="photographer-link"
+                      href={photo.photographer_url}
                     >
-                      <span className="download-button-container">
-                        <svg
-                          className="download-icon"
-                          viewBox="0 0 24 24"
-                          width="20"
-                          height="20"
-                        >
-                          <path d="m12 17.5-6.875-6.875L7.05 8.63125l3.575 3.57505V1h2.75v11.2063l3.575-3.57505 1.925 1.99375L12 17.5ZM3.75 23c-.75625 0-1.40365-.2693-1.94219-.8078C1.26927 21.6536 1 21.0063 1 20.25v-4.125h2.75v4.125h16.5v-4.125H23v4.125c0 .7563-.2693 1.4036-.8078 1.9422-.5386.5385-1.1859.8078-1.9422.8078H3.75Z" />
-                        </svg>
-                        <span className="download-button_text">Download</span>
-                      </span>
+                      <div
+                        className="photographer-link_wrapper"
+                        data-open="false"
+                      >
+                        {photo.photographer}
+                      </div>
                     </a>
+
+                    <DownloadUrl photo={photo} />
                   </div>
                 </div>
               );

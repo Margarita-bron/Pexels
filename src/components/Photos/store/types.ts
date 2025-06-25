@@ -22,6 +22,24 @@ export interface IPhoto {
   size: keyof IPhotoSize;
 }
 
+export interface IParameters {
+  query?: string;
+  page?: number;
+  per_page?: number;
+}
+
+export interface ISearchParameters {
+  query: string;
+  page?: number;
+  per_page?: number;
+}
+
+export interface IPatch {
+  id: string;
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  [key: string]: unknown;
+}
+
 export interface PhotoImage {
   photo: IPhoto;
   size: keyof IPhotoSize;
