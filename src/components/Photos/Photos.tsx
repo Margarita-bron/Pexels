@@ -19,7 +19,10 @@ import {
   PhotoImage,
 } from './store/types';
 
-export const Photos: React.FC<{ search: string }> = ({ search }) => {
+export const Photos: React.FC<{
+  search: string;
+  setHasPhotos?: (hasPhotos: boolean) => void;
+}> = ({ search, setHasPhotos }) => {
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<
     (IPhoto & { size: keyof IPhotoSize })[]
@@ -160,6 +163,13 @@ export const Photos: React.FC<{ search: string }> = ({ search }) => {
     [isFetching],
   );
 
+  useEffect(() => {
+    const hasPhotos = photos.length > 0;
+    if (setHasPhotos) {
+      setHasPhotos(hasPhotos);
+    }
+  }, [photos, setHasPhotos]);
+
   const DownloadUrl: React.FC<{ photo: IPhoto }> = ({ photo }) => {
     const buttonHandle = async (): Promise<void> => {
       try {
@@ -216,91 +226,104 @@ export const Photos: React.FC<{ search: string }> = ({ search }) => {
 
   return (
     <div className="catalog">
-      {error && <p className="error-loading">Loading</p>}
+      {error && (
+        <div className="spinner-border text-secondary" role="status">
+          <span className="visually-hidden">Загрузка...</span>
+        </div>
+      )}
 
-      <div ref={container} className="photos-wrapper">
-        {columns.map((columnPhotos, colIndex) => (
-          <div key={colIndex} className="photo-column">
-            {columnPhotos.map(({ photo, size }) => {
-              const isLastPhoto = photo.id === lastPhotoId;
+      {photos.length === 0 && !isInitialLoading && !isFetching && !error ? (
+        <div className="no-photos-message"></div>
+      ) : (
+        <>
+          <div ref={container} className="photos-wrapper">
+            {columns.map((columnPhotos, colIndex) => (
+              <div key={colIndex} className="photo-column">
+                {columnPhotos.map(({ photo, size }) => {
+                  const isLastPhoto = photo.id === lastPhotoId;
 
-              return (
-                <div
-                  key={photo.id}
-                  className="photo-img"
-                  ref={isLastPhoto ? lastPhotoReference : null}
-                >
-                  <PhotoImage photo={photo} size={size} />
-                  <div className="overlay"></div>
-                  <div className="upper-media_overlay">
-                    <button
-                      title="Collect"
-                      data-hoveronly="true"
-                      className="media-button button"
+                  return (
+                    <div
+                      key={photo.id}
+                      className="photo-img"
+                      ref={isLastPhoto ? lastPhotoReference : null}
                     >
-                      <svg
-                        className="icon__color-white"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                      >
-                        <path d="M19.8474 22.9996c-.2869 0-.5698-.102-.7908-.2969l-7.2934-6.4323-7.29346 6.4323c-.3454.3053-.8421.3829-1.26908.1982-.42631-.1841-.70066-.5958-.70066-1.0505V2.14923C2.5 1.51433 3.02763 1 3.67895 1H21.0263v2.29847H4.8579V19.2608l6.1145-5.3928c.4486-.3964 1.1328-.3964 1.5816 0l6.1144 5.3928V5.92529h2.3579V21.8504c0 .4547-.2743.8664-.7006 1.0505-.1533.0667-.3165.0987-.4783.0987Z" />
-                      </svg>
-                    </button>
-                    <button
-                      className={`media-button button ${likedPhotoIds.has(Number(photo.id)) ? 'button_color-strawberry' : ''}`}
-                      aria-disabled="false"
-                      title="Like"
-                      data-hoveronly={
-                        likedPhotoIds.has(Number(photo.id)) ? '' : 'true'
-                      }
-                      onClick={(): void => {
-                        toggleLike(photo.id);
-                      }}
-                    >
-                      <span className="">
-                        <svg
-                          className="icon__color-white"
-                          viewBox="0 0 24 24"
-                          width="24"
-                          height="24"
+                      <PhotoImage photo={photo} size={size} />
+                      <div className="overlay"></div>
+                      <div className="upper-media_overlay">
+                        <button
+                          title="Collect"
+                          data-hoveronly="true"
+                          className="media-button button"
                         >
-                          <path d="M12.0001 21.6125c-.3065 0-.6003-.1225-.8158-.3399l-8.16405-8.2294C1.54327 11.5661.835892 9.73644 1.03214 7.89391c.19368-1.82393 1.23712-3.47214 2.86224-4.52264 2.50438-1.61935 6.41002-1.5302 9.06512 2.49348l.9774 1.51097-1.9304 1.24802-.9716-1.50199C9.23852 4.39804 6.77971 4.24476 5.1424 5.30167c-1.03959.67147-1.70465 1.70529-1.82457 2.83467-.12314 1.15502.33733 2.29086 1.33075 3.28486l7.35152 7.4105 7.3476-7.4073c.9967-.9966 1.4571-2.1324 1.3346-3.28742-.1198-1.13002-.7849-2.16321-1.8245-2.83531-.9767-.63171-2.1651-.776-3.256-.40083-.213.07375-.6151.26936-.9152.44508l-1.1634-1.9817c.3643-.2142.9165-.49382 1.3289-.63619 1.7668-.60798 3.6806-.3739 5.2537.64324 1.6252 1.0505 2.6686 2.69934 2.8622 4.52328.1957 1.84189-.5117 3.67155-1.9919 5.15175l-8.1602 8.2263c-.2155.2174-.5092.3399-.8158.3399Z" />
-                        </svg>
-                      </span>
-                    </button>
-                  </div>
-                  <div data-hoveronly="true" className="lower-media_overlay">
-                    <a
-                      data-testid="next-link"
-                      title={photo.photographer}
-                      className="photographer-link"
-                      href={photo.photographer_url}
-                    >
-                      <div
-                        className="photographer-link_wrapper"
-                        data-open="false"
-                      >
-                        {photo.photographer}
+                          <svg
+                            className="icon__color-white"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            height="24"
+                          >
+                            <path d="M19.8474 22.9996c-.2869 0-.5698-.102-.7908-.2969l-7.2934-6.4323-7.29346 6.4323c-.3454.3053-.8421.3829-1.26908.1982-.42631-.1841-.70066-.5958-.70066-1.0505V2.14923C2.5 1.51433 3.02763 1 3.67895 1H21.0263v2.29847H4.8579V19.2608l6.1145-5.3928c.4486-.3964 1.1328-.3964 1.5816 0l6.1144 5.3928V5.92529h2.3579V21.8504c0 .4547-.2743.8664-.7006 1.0505-.1533.0667-.3165.0987-.4783.0987Z" />
+                          </svg>
+                        </button>
+                        <button
+                          className={`media-button button ${likedPhotoIds.has(Number(photo.id)) ? 'button_color-strawberry' : ''}`}
+                          aria-disabled="false"
+                          title="Like"
+                          data-hoveronly={
+                            likedPhotoIds.has(Number(photo.id)) ? '' : 'true'
+                          }
+                          onClick={(): void => {
+                            toggleLike(photo.id);
+                          }}
+                        >
+                          <span className="">
+                            <svg
+                              className="icon__color-white"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                            >
+                              <path d="M12.0001 21.6125c-.3065 0-.6003-.1225-.8158-.3399l-8.16405-8.2294C1.54327 11.5661.835892 9.73644 1.03214 7.89391c.19368-1.82393 1.23712-3.47214 2.86224-4.52264 2.50438-1.61935 6.41002-1.5302 9.06512 2.49348l.9774 1.51097-1.9304 1.24802-.9716-1.50199C9.23852 4.39804 6.77971 4.24476 5.1424 5.30167c-1.03959.67147-1.70465 1.70529-1.82457 2.83467-.12314 1.15502.33733 2.29086 1.33075 3.28486l7.35152 7.4105 7.3476-7.4073c.9967-.9966 1.4571-2.1324 1.3346-3.28742-.1198-1.13002-.7849-2.16321-1.8245-2.83531-.9767-.63171-2.1651-.776-3.256-.40083-.213.07375-.6151.26936-.9152.44508l-1.1634-1.9817c.3643-.2142.9165-.49382 1.3289-.63619 1.7668-.60798 3.6806-.3739 5.2537.64324 1.6252 1.0505 2.6686 2.69934 2.8622 4.52328.1957 1.84189-.5117 3.67155-1.9919 5.15175l-8.1602 8.2263c-.2155.2174-.5092.3399-.8158.3399Z" />
+                            </svg>
+                          </span>
+                        </button>
                       </div>
-                    </a>
+                      <div
+                        data-hoveronly="true"
+                        className="lower-media_overlay"
+                      >
+                        <a
+                          data-testid="next-link"
+                          title={photo.photographer}
+                          className="photographer-link"
+                          href={photo.photographer_url}
+                        >
+                          <div
+                            className="photographer-link_wrapper"
+                            data-open="false"
+                          >
+                            {photo.photographer}
+                          </div>
+                        </a>
 
-                    <DownloadUrl photo={photo} />
-                  </div>
-                </div>
-              );
-            })}
+                        <DownloadUrl photo={photo} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="spinner-wrapper">
-        {isInitialLoading ||
-          (isFetching && (
-            <div className="spinner-border text-secondary" role="status">
-              <span className="visually-hidden">Загрузка...</span>
-            </div>
-          ))}
-      </div>
+          <div className="spinner-wrapper">
+            {isInitialLoading ||
+              (isFetching && (
+                <div className="spinner-border text-secondary" role="status">
+                  <span className="visually-hidden">Загрузка...</span>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -13,8 +13,6 @@ const App: React.FC = () => {
     color: '',
   });
 
-  const hasSearch = search !== '';
-
   return (
     <Router>
       <Routes>
@@ -29,20 +27,17 @@ const App: React.FC = () => {
             />
           }
         />
-
-        {hasSearch && (
-          <Route
-            path="/search"
-            element={
-              <SearchPage
-                filters={filters}
-                search={search}
-                setSearch={setSearch}
-                setFilters={setFilters}
-              />
-            }
-          />
-        )}
+        <Route
+          path="/search"
+          element={
+            <SearchPage
+              filters={filters}
+              search={search}
+              setSearch={setSearch}
+              setFilters={setFilters}
+            />
+          }
+        />
       </Routes>
     </Router>
   );

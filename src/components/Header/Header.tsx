@@ -10,7 +10,13 @@ export const Header: React.FC<{
   const isSearchPage = location.pathname.startsWith('/search');
 
   return (
-    <div className="header-navbar">
+    <div
+      className={
+        isSearchPage
+          ? 'header-navbar header-navbar_position-relative'
+          : 'header-navbar'
+      }
+    >
       <svg
         width="85"
         height="38"

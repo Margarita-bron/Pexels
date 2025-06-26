@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import '../../styles/index';
 import { Menu } from '../Menu/Menu';
 import {
@@ -5,19 +6,21 @@ import {
   IFiltersProperties,
 } from '../Photos/components/FilterContainer/FilterContainer';
 import { Photos } from '../Photos/Photos';
+import { InfoSearchBlock } from '../Photos/components/FilterContainer/EmptySearchContent';
 
 export const Catalog: React.FC<{
   search: string;
   filters: IFiltersProperties;
   setFilters: React.Dispatch<React.SetStateAction<IFiltersProperties>>;
 }> = ({ search, filters, setFilters }) => {
-  const hasFilters =
-    filters.orientation !== '' || filters.size !== '' || filters.color !== '';
+  const hasSearch = search !== '';
+  const [hasPhotos, setHasPhotos] = useState(true);
 
-  return hasFilters ? (
+  return hasSearch ? (
     <div className="main-page-catalog_info">
+      <InfoSearchBlock search={search} hasPhotos={hasPhotos} />
       <FilterContainer filters={filters} setFilters={setFilters} />
-      <Photos search={search} />
+      <Photos search={search} setHasPhotos={setHasPhotos} />
     </div>
   ) : (
     <div className="main-page-catalog">

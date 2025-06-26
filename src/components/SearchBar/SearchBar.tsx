@@ -1,7 +1,8 @@
 // import "./SerchBar.module.css"
 
+import React from 'react';
 import { ChangeEvent, useState } from 'react';
-import { useNavigate, NavigateFunction } from 'react-router-dom';
+import { useNavigate, NavigateFunction } from 'react-router';
 
 export const SearchBar: React.FC<{
   search: string;
@@ -9,6 +10,10 @@ export const SearchBar: React.FC<{
 }> = ({ search, setSearch }) => {
   const navigate: NavigateFunction = useNavigate();
   const [inputValue, setInputValue] = useState(search);
+
+  React.useEffect(() => {
+    setInputValue(search);
+  }, [search]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(event.target.value);
