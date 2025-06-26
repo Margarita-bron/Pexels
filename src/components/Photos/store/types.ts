@@ -1,12 +1,25 @@
 export interface IPhotoSize {
   original: string;
-  //large2x: string;
+  large2x: string;
   large: string;
   medium: string;
-  //small: string;
+  small: string;
   portrait: string;
   landscape: string;
   tiny: string;
+}
+
+export interface IPhotoSizeValues {
+  large2x: string;
+  large: string;
+  medium: string;
+  small: string;
+}
+
+export interface IPhotoOrientationValues {
+  portrait: string;
+  landscape: string;
+  square: string;
 }
 
 export interface IPhoto {
@@ -19,6 +32,7 @@ export interface IPhoto {
   width: number;
   height: number;
   url: string;
+  avg_color: string;
   size: keyof IPhotoSize;
 }
 

@@ -2,7 +2,7 @@ import './menu.css';
 
 export const Menu: React.FC = () => {
   const menuElements: Record<string, string> = {
-    Home: '/home',
+    Home: '/',
     Videos: '/video',
     Leaderboard: '/leaders',
     Challenges: '/challenges',

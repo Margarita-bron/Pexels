@@ -1,9 +1,25 @@
 import '../../styles/index';
 import { Menu } from '../Menu/Menu';
+import {
+  FilterContainer,
+  IFiltersProperties,
+} from '../Photos/components/FilterContainer/FilterContainer';
 import { Photos } from '../Photos/Photos';
 
-export const Catalog: React.FC<{ search: string }> = ({ search }) => {
-  return (
+export const Catalog: React.FC<{
+  search: string;
+  filters: IFiltersProperties;
+  setFilters: React.Dispatch<React.SetStateAction<IFiltersProperties>>;
+}> = ({ search, filters, setFilters }) => {
+  const hasFilters =
+    filters.orientation !== '' || filters.size !== '' || filters.color !== '';
+
+  return hasFilters ? (
+    <div className="main-page-catalog_info">
+      <FilterContainer filters={filters} setFilters={setFilters} />
+      <Photos search={search} />
+    </div>
+  ) : (
     <div className="main-page-catalog">
       <Menu />
       <div className="main-page-catalog_info">

@@ -1,0 +1,29 @@
+.filter-container {
+  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.filter-block{
+  display: inline-flex;
+  width: 100%;
+}
+
+.dropdown-button{
+  display: inline-flex;
+    background: #ededed;
+    border-color: #4a4a4a;
+    color: rgb(25, 25, 25);
+text-align: left;
+}
+
+.dropdown-button_content{
+      
+}
+
+#orientation-menu{
+  min-width: 493.328px; 
+  top: calc(100% + 8px); 
+  left: 0px;
+}
