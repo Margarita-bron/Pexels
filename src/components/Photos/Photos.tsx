@@ -22,7 +22,8 @@ import {
 export const Photos: React.FC<{
   search: string;
   setHasPhotos?: (hasPhotos: boolean) => void;
-}> = ({ search, setHasPhotos }) => {
+  setTotalResult: (totalResult: number) => void;
+}> = ({ search, setHasPhotos, setTotalResult }) => {
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<
     (IPhoto & { size: keyof IPhotoSize })[]
@@ -61,6 +62,15 @@ export const Photos: React.FC<{
     search.trim() === ''
       ? (curatedData?.photos ?? [])
       : (searchData?.photos ?? []);
+
+  useEffect(() => {
+    const totalNumber =
+      search.trim() === ''
+        ? (curatedData?.total_results ?? 0)
+        : (searchData?.total_results ?? 0);
+
+    setTotalResult(totalNumber);
+  }, [curatedData, searchData, search, setTotalResult]);
 
   const isInitialLoading =
     search.length > 0 ? isSearchLoading : isCuratedLoading;
@@ -228,7 +238,7 @@ export const Photos: React.FC<{
     <div className="catalog">
       {error && (
         <div className="spinner-border text-secondary" role="status">
-          <span className="visually-hidden">Загрузка...</span>
+          <span className="visually-hidden">Loading...</span>
         </div>
       )}
 

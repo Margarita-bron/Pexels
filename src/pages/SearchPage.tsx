@@ -8,7 +8,8 @@ export const SearchPage: React.FC<{
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   setFilters: React.Dispatch<React.SetStateAction<IFiltersProperties>>;
-}> = ({ filters, search, setSearch, setFilters }) => {
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ filters, search, setSearch, setFilters, setClicked }) => {
   const [searchParameters] = useSearchParams();
   const query = searchParameters.get('query') ?? '';
 
@@ -21,7 +22,13 @@ export const SearchPage: React.FC<{
   return (
     <div className="container">
       <Header search={search} setSearch={setSearch} />
-      <Catalog search={search} filters={filters} setFilters={setFilters} />
+      <Catalog
+        search={search}
+        setSearch={setSearch}
+        filters={filters}
+        setFilters={setFilters}
+        setClicked={setClicked}
+      />
     </div>
   );
 };

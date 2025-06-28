@@ -6,21 +6,35 @@ import {
   IFiltersProperties,
 } from '../Photos/components/FilterContainer/FilterContainer';
 import { Photos } from '../Photos/Photos';
-import { InfoSearchBlock } from '../Photos/components/FilterContainer/EmptySearchContent';
+import { InfoSearchBlock } from '../Photos/components/InfoSearchBlock/InfoSearchBlock';
+import { DataTable } from '../Photos/components/DataTable/DataTable';
 
 export const Catalog: React.FC<{
   search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
   filters: IFiltersProperties;
   setFilters: React.Dispatch<React.SetStateAction<IFiltersProperties>>;
-}> = ({ search, filters, setFilters }) => {
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ search, setSearch, filters, setFilters, setClicked }) => {
   const hasSearch = search !== '';
   const [hasPhotos, setHasPhotos] = useState(true);
+  const [totalResult, setTotalResult] = useState<number>(0);
 
   return hasSearch ? (
-    <div className="main-page-catalog_info">
-      <InfoSearchBlock search={search} hasPhotos={hasPhotos} />
+    <div className="main-page-catalog">
+      <InfoSearchBlock
+        search={search}
+        setSearch={setSearch}
+        hasPhotos={hasPhotos}
+        setClicked={setClicked}
+      />
+      <DataTable totalResult={totalResult} />
       <FilterContainer filters={filters} setFilters={setFilters} />
-      <Photos search={search} setHasPhotos={setHasPhotos} />
+      <Photos
+        search={search}
+        setHasPhotos={setHasPhotos}
+        setTotalResult={setTotalResult}
+      />
     </div>
   ) : (
     <div className="main-page-catalog">
@@ -42,7 +56,7 @@ export const Catalog: React.FC<{
           </span>
         </button>
       </div>
-      <Photos search={search} />
+      <Photos search={search} setTotalResult={setTotalResult} />
     </div>
   );
 };

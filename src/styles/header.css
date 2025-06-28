@@ -166,6 +166,7 @@
     
     .header-navbar{
     padding-left: 15px;
+    padding-right: 15px;
     }
 
 }
@@ -187,7 +188,7 @@ svg {
     color: #191919;
     background: #fff;
     border: 1px solid;
-    border-color: #ededed;
+    border-color: var(--border-color);
 }
 
 .button {

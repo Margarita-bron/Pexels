@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { ChangeEvent, useState } from 'react';
-import { useNavigate, NavigateFunction } from 'react-router';
+import { useNavigate } from 'react-router';
 
 export const SearchBar: React.FC<{
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ search, setSearch }) => {
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState(search);
 
   React.useEffect(() => {
@@ -22,9 +22,7 @@ export const SearchBar: React.FC<{
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     setSearch(inputValue.trim());
-    if (inputValue.trim() === '') {
-      void navigate(`/`);
-    } else {
+    if (inputValue.trim() !== '') {
       void navigate(`/search?query=${encodeURIComponent(inputValue.trim())}`);
     }
   };
