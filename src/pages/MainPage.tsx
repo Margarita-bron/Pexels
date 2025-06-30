@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Catalog, Header, HeaderContent } from '../components';
-import { IFiltersProperties } from '../components/Photos/components/FilterContainer/FilterContainer';
+import { IFiltersProperties } from '../components/Photos/components/FilterContainer/types';
 
 export const MainPage: React.FC<{
   filters: IFiltersProperties;
@@ -16,7 +16,7 @@ export const MainPage: React.FC<{
   return (
     <div className="container">
       <Header search={search} setSearch={setSearch} />
-      <HeaderContent search={search} setSearch={setSearch} />
+      <HeaderContent search={search} setSearch={setSearch} filters={filters} />
       <Catalog
         search={search}
         setSearch={setSearch}

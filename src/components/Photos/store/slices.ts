@@ -27,8 +27,13 @@ const baseApi = createApi({
 export const photoAPI = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchCuratedPhotos: build.query<PexelsResponse, IParameters>({
-      query: ({ page = 1, per_page = PER_PAGE }) =>
-        `/v1/curated?page=${String(page)}&per_page=${String(per_page)}`,
+      query: ({ page = 1, per_page = PER_PAGE, orientation, size, color }) => {
+        let url = `/v1/curated?page=${String(page)}&per_page=${String(per_page)}`;
+        if (orientation) url += `&orientation=${orientation}`;
+        if (size) url += `&size=${size}`;
+        if (color) url += `&color=${color}`;
+        return url;
+      },
       providesTags: Object.values(TagType),
     }),
     postPhoto: build.mutation<string, IPatch>({
@@ -40,8 +45,20 @@ export const photoAPI = baseApi.injectEndpoints({
       invalidatesTags: (result, error) => (error ? [] : [TagType.Photo]),
     }),
     searchPhotos: build.query<PexelsResponse, ISearchParameters>({
-      query: ({ query, page = 1, per_page = PER_PAGE }) =>
-        `/v1/search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}`,
+      query: ({
+        query,
+        page = 1,
+        per_page = PER_PAGE,
+        orientation,
+        size,
+        color,
+      }) => {
+        let url = `/v1/search?query=${encodeURIComponent(query)}&page=${String(page)}&per_page=${String(per_page)}`;
+        if (orientation) url += `&orientation=${orientation}`;
+        if (size) url += `&size=${size}`;
+        if (color) url += `&color=${color}`;
+        return url;
+      },
       providesTags: Object.values(TagType),
     }),
   }),

@@ -2,12 +2,12 @@
   width: 100%;
   margin-top: 30px;
   margin-bottom: 30px;
+  padding-right: 30px;
+  padding-left: 30px;
 }
 
 @media (min-width: 901px) and (max-width: 1440px) {
     .main-page-catalog {
-        padding-right: 30px;
-        padding-left: 30px;
         max-width: 1440px;
     }
 }

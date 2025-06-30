@@ -5,12 +5,18 @@ import { useFetchCuratedPhotosQuery } from '../Photos/store/slices';
 import React from 'react';
 import { IPhoto } from '../Photos/store/types';
 import { SearchBar } from '../SearchBar/SearchBar';
+import { IFiltersProperties } from '../Photos/components/FilterContainer/types';
 
 export const HeaderContent: React.FC<{
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ search, setSearch }) => {
-  const { data } = useFetchCuratedPhotosQuery({ page: 1, per_page: 10 });
+  filters: IFiltersProperties;
+}> = ({ search, setSearch, filters }) => {
+  const { data } = useFetchCuratedPhotosQuery({
+    page: 1,
+    per_page: 10,
+    ...filters,
+  });
 
   const randomPhoto: IPhoto | null = React.useMemo(() => {
     if (!data?.photos.length) return null;

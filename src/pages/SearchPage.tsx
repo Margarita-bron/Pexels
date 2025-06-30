@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router';
 import { Catalog, Header } from '../components';
-import { IFiltersProperties } from '../components/Photos/components/FilterContainer/FilterContainer';
 import React from 'react';
+import { IFiltersProperties } from '../components/Photos/components/FilterContainer/types';
 
 export const SearchPage: React.FC<{
   filters: IFiltersProperties;

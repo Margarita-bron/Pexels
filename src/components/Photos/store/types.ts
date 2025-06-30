@@ -7,10 +7,10 @@ export interface IPhotoSize {
   portrait: string;
   landscape: string;
   tiny: string;
+  square: string;
 }
 
 export interface IPhotoSizeValues {
-  large2x: string;
   large: string;
   medium: string;
   small: string;
@@ -40,12 +40,18 @@ export interface IParameters {
   query?: string;
   page?: number;
   per_page?: number;
+  orientation: keyof IPhotoOrientationValues | '';
+  size: keyof IPhotoSizeValues | '';
+  color: string;
 }
 
 export interface ISearchParameters {
   query: string;
   page?: number;
   per_page?: number;
+  orientation: keyof IPhotoOrientationValues | '';
+  size: keyof IPhotoSizeValues | '';
+  color: string;
 }
 
 export interface IPatch {

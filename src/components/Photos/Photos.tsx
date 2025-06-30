@@ -18,12 +18,14 @@ import {
   ISearchParameters,
   PhotoImage,
 } from './store/types';
+import { IFiltersProperties } from './components/FilterContainer/types';
 
 export const Photos: React.FC<{
   search: string;
   setHasPhotos?: (hasPhotos: boolean) => void;
   setTotalResult: (totalResult: number) => void;
-}> = ({ search, setHasPhotos, setTotalResult }) => {
+  filters: IFiltersProperties;
+}> = ({ search, setHasPhotos, setTotalResult, filters }) => {
   const [page, setPage] = useState(1);
   const [allPhotos, setAllPhotos] = useState<
     (IPhoto & { size: keyof IPhotoSize })[]
@@ -34,13 +36,22 @@ export const Photos: React.FC<{
     setPage(1);
   }, [search]);
 
+  useEffect(() => {
+    setPage(1);
+    setAllPhotos([]);
+  }, [filters]);
+
   const searchParameters = useMemo<ISearchParameters>(() => {
-    return { query: search, page, per_page: PER_PAGE };
-  }, [search, page]);
+    return { query: search, page, per_page: PER_PAGE, ...filters };
+  }, [search, page, filters]);
 
   const curatedParameters = useMemo<IParameters>(() => {
-    return { page, per_page: PER_PAGE };
-  }, [page]);
+    return {
+      page,
+      per_page: PER_PAGE,
+      ...filters,
+    };
+  }, [page, filters]);
 
   const {
     data: curatedData,

@@ -1,10 +1,10 @@
 import './styles/index';
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { IFiltersProperties } from './components/Photos/components/FilterContainer/FilterContainer';
 import { MainPage } from './pages/MainPage';
 import { SearchPage } from './pages/SearchPage';
 import { useNavigate } from 'react-router';
+import { IFiltersProperties } from './components/Photos/components/FilterContainer/types';
 
 const App: React.FC = () => {
   const [search, setSearch] = useState('');

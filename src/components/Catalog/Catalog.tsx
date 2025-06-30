@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import '../../styles/index';
 import { Menu } from '../Menu/Menu';
-import {
-  FilterContainer,
-  IFiltersProperties,
-} from '../Photos/components/FilterContainer/FilterContainer';
+import { FilterContainer } from '../Photos/components/FilterContainer/FilterContainer';
 import { Photos } from '../Photos/Photos';
 import { InfoSearchBlock } from '../Photos/components/InfoSearchBlock/InfoSearchBlock';
 import { DataTable } from '../Photos/components/DataTable/DataTable';
+import { IFiltersProperties } from '../Photos/components/FilterContainer/types';
 
 export const Catalog: React.FC<{
   search: string;
@@ -34,6 +32,7 @@ export const Catalog: React.FC<{
         search={search}
         setHasPhotos={setHasPhotos}
         setTotalResult={setTotalResult}
+        filters={filters}
       />
     </div>
   ) : (
@@ -56,7 +55,11 @@ export const Catalog: React.FC<{
           </span>
         </button>
       </div>
-      <Photos search={search} setTotalResult={setTotalResult} />
+      <Photos
+        search={search}
+        setTotalResult={setTotalResult}
+        filters={filters}
+      />
     </div>
   );
 };
