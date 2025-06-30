@@ -9,6 +9,9 @@
     transform: translateY(0px);
     overflow: visible;
     margin-bottom: 30px;
+
+    column-gap: 30px;
+    row-gap: 30px;
 }
 
 .filter-block{
@@ -90,7 +93,12 @@ width: 100%;
   color:var(--font-color)
 }
 
+.filter-icon{
+  transition: transform 0.15s ease-in;
+}
+
 .arrow_transform-180{
+  transition: transform 0.15s ease-in;
   transform: rotate(180deg);
 }
 
@@ -132,4 +140,30 @@ width: 100%;
 
 .dropdown-button_title{
   text-align: center;
+}
+
+#filter-container-button, #popular-container-button{
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+ #filter-container-button, #popular-container-button{
+   width: fit-content;
+ }
+}
+
+.filter-container_content{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 11px;
+}
+
+.filter-container_content-text{
+  padding-bottom: 1px;
+}
+
+.filter-clicked{
+  color: #7f7f7f;
+  fill: #7f7f7f;
 }

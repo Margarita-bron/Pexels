@@ -14,6 +14,8 @@
     transition: .25s ease;
 
     font-weight: 500;
+
+    margin-right: 10px;
 }
 
 .tab_number{
@@ -47,4 +49,8 @@
 .data-table-tab_active:hover{
   color: #fff;
     background-color: #191919;
+}
+
+.data-users-wrapper{
+  justify-self: flex-start;
 }

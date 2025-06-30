@@ -10,7 +10,7 @@ export const DataTable: React.FC<{ totalResult: number }> = ({
   }
 
   return (
-    <div>
+    <div className="data-users-wrapper">
       <a
         data-testid="next-link"
         className="data-table-tab data-table-tab_active"
