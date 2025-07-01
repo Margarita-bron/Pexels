@@ -20,7 +20,6 @@ export default defineConfig({
     },
     port: 4200,
   },
-
   test: {
     root: import.meta.dirname,
     name: packageJson.name,
