@@ -6,7 +6,7 @@ import { API_KEY } from './src/components/Photos/constants';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Pexels/',
+  base: '/',
   server: {
     proxy: {
       '/api': {
