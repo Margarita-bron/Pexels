@@ -30,7 +30,7 @@ text-align: left;
 
 .filter-block_button{
     width: 100%;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
     font-weight: 500;
 }
 
@@ -157,6 +157,7 @@ width: 100%;
   flex-direction: row;
   align-items: center;
   gap: 11px;
+  margin-right: 20px;
 }
 
 .filter-container_content-text{
@@ -166,4 +167,14 @@ width: 100%;
 .filter-clicked{
   color: #7f7f7f;
   fill: #7f7f7f;
+}
+
+#filter-container-button{
+position: relative;
+}
+.reset-filters-button{
+  position: relative;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+  right: ;
 }

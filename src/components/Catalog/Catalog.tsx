@@ -7,6 +7,7 @@ import { InfoSearchBlock } from '../Photos/components/InfoSearchBlock/InfoSearch
 import { DataTable } from '../Photos/components/DataTable/DataTable';
 import { IFiltersProperties } from '../Photos/components/FilterContainer/types';
 import { IPhotoPopular } from './store/types';
+import React from 'react';
 
 export const Catalog: React.FC<{
   search: string;
@@ -34,6 +35,20 @@ export const Catalog: React.FC<{
 
   const toggleDropdown = (value: 'filter' | 'popular'): void => {
     setIsOpen((previous) => ({ ...previous, [value]: !previous[value] }));
+  };
+
+  const activeFiltersCount = React.useMemo(() => {
+    return Object.values(filters).filter(
+      (value) => value !== '' && value !== null && value !== undefined,
+    ).length;
+  }, [filters]);
+
+  const resetFilters = (): void => {
+    setFilters({
+      orientation: '',
+      size: '',
+      color: '',
+    });
   };
 
   return hasSearch ? (
@@ -81,7 +96,22 @@ export const Catalog: React.FC<{
               >
                 Filters
               </span>
+              {activeFiltersCount > 0 && (
+                <span className="filters-count">({activeFiltersCount})</span>
+              )}
             </span>
+            {activeFiltersCount > 0 && (
+              <button
+                type="button"
+                className="button reset-filters-button button_white-color"
+                onClick={resetFilters}
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22">
+                  <path d="M5.76777 19.9099 19.9099 5.76777 18.1421 4 4 18.1421l1.76777 1.7678Z" />
+                  <path d="M4 5.76777 18.1421 19.9099l1.7678-1.7678L5.76777 4 4 5.76777Z" />
+                </svg>
+              </button>
+            )}
           </button>
           <></>
           <button

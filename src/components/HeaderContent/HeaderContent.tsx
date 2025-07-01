@@ -6,6 +6,8 @@ import React from 'react';
 import { IPhoto } from '../Photos/store/types';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { IFiltersProperties } from '../Photos/components/FilterContainer/types';
+import { popularTopics } from '../Photos/store/themes';
+import { useNavigate } from 'react-router';
 
 export const HeaderContent: React.FC<{
   search: string;
@@ -17,6 +19,14 @@ export const HeaderContent: React.FC<{
     per_page: 10,
     ...filters,
   });
+  const navigate = useNavigate();
+  const handleSubmit = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    value: string,
+  ): void => {
+    event.preventDefault();
+    void navigate(`/search?query=${encodeURIComponent(value.trim())}`);
+  };
 
   const randomPhoto: IPhoto | null = React.useMemo(() => {
     if (!data?.photos.length) return null;
@@ -32,11 +42,31 @@ export const HeaderContent: React.FC<{
       }
     : {};
 
+  const topics = getRandomItems(popularTopics);
+  const topicsToLower = topics.map((word) => (word = word.toLowerCase()));
   return (
     <div className="header" style={headerStyle}>
       <div className="header-content">
-        <h1 className="header-content_title text__color-white">{TITLE}</h1>
+        <h1 className={`header-content_title text__color-white white-color`}>
+          {TITLE}
+        </h1>
         <SearchBar search={search} setSearch={setSearch} />
+        <div className="topics-wrapper white-color">
+          <span>Suggested: </span>
+          {topicsToLower.map((word, index) => (
+            <a
+              key={index}
+              className="topic-link"
+              onClick={(event) => {
+                event.preventDefault();
+                handleSubmit(event, word);
+              }}
+            >
+              {word}
+              {index === 6 ? '' : <span>, </span>}
+            </a>
+          ))}
+        </div>
         <a
           data-testid="author-link"
           className="photo-img_author-link"
@@ -53,3 +83,15 @@ export const HeaderContent: React.FC<{
     </div>
   );
 };
+
+function getRandomItems(array: string[]): string[] {
+  const newArray = [...array];
+  const result: string[] = [];
+  for (let index = 0; index <= 6; index++) {
+    if (newArray.length === 0) break;
+    const randomIndex = Math.floor(Math.random() * newArray.length);
+    const [item] = newArray.splice(randomIndex, 1);
+    result.push(item);
+  }
+  return result;
+}

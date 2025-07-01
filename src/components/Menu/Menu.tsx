@@ -2,10 +2,10 @@ import './menu.css';
 
 export const Menu: React.FC = () => {
   const menuElements: Record<string, string> = {
-    Home: '/',
-    Videos: '/video',
-    Leaderboard: '/leaders',
-    Challenges: '/challenges',
+    Home: '#',
+    Videos: '#',
+    Leaderboard: '#',
+    Challenges: '#',
   };
 
   const menuItems = Object.entries(menuElements).map(([name, link]) => (
