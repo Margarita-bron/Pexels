@@ -31,6 +31,7 @@ export const Photos: React.FC<{
     (IPhoto & { size: keyof IPhotoSize })[]
   >([]);
   const [likedPhotoIds, setLikedPhotoIds] = useState<Set<number>>(new Set());
+  const loadingReference = useRef(false);
 
   useEffect(() => {
     setPage(1);
@@ -58,7 +59,9 @@ export const Photos: React.FC<{
     isFetching: isCuratedFetching,
     isLoading: isCuratedLoading,
     error: curatedError,
-  } = useFetchCuratedPhotosQuery(curatedParameters);
+  } = useFetchCuratedPhotosQuery(curatedParameters, {
+    skip: search.trim() !== '',
+  });
 
   const {
     data: searchData,
@@ -159,30 +162,42 @@ export const Photos: React.FC<{
     });
   };
 
-  const lastPhotoReference = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (isFetching) return;
-
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            if (firstLoad.current) {
-              firstLoad.current = false;
-              return;
-            }
-            console.log('next page load');
+  useEffect(() => {
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log(
+            'IntersectionObserver triggered, loadingRef:',
+            loadingReference.current,
+          );
+          if (firstLoad.current) {
+            firstLoad.current = false;
+            return;
+          }
+          if (!loadingReference.current) {
+            loadingReference.current = true;
             setPage((previous) => previous + 1);
           }
-        },
-        { threshold: 0.5 },
-      );
+        }
+      },
+      { threshold: 0.8, root: null },
+    );
 
-      if (node) observer.current.observe(node);
-    },
-    [isFetching],
-  );
+    return (): void => {
+      observer.current?.disconnect();
+    };
+  }, []);
+
+  const lastPhotoReference = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+    if (node && observer.current) observer.current.observe(node);
+  }, []);
+
+  useEffect(() => {
+    if (!isFetching) {
+      loadingReference.current = false;
+    }
+  }, [isFetching]);
 
   useEffect(() => {
     const hasPhotos = photos.length > 0;
