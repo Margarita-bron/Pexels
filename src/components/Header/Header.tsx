@@ -56,11 +56,7 @@ export const Header: React.FC<{
       <div className="header-navbar_menu">
         <div className="navbar-tooltip">
           <div className="navbar-tooltip-item">
-            <a
-              data-testid="next-link"
-              className="button"
-              href="/ru-ru/discover/"
-            >
+            <a data-testid="next-link" className="button" href="#">
               <span
                 className={isSearchPage ? ' black-color ' : ' white-color '}
               >
@@ -80,7 +76,7 @@ export const Header: React.FC<{
           <div data-tooltip="true" className="tooltip-container">
             <ul className="tooltip-list">
               <li>
-                <a data-testid="next-link" className="" href="/ru-ru/discover/">
+                <a data-testid="next-link" className="" href="#">
                   <svg
                     data-indicator="true"
                     className=""
@@ -94,11 +90,7 @@ export const Header: React.FC<{
                 </a>
               </li>
               <li>
-                <a
-                  data-testid="next-link"
-                  className=""
-                  href="/ru-ru/leaderboard/"
-                >
+                <a data-testid="next-link" className="" href="#">
                   <svg
                     data-indicator="true"
                     className=""
@@ -112,11 +104,7 @@ export const Header: React.FC<{
                 </a>
               </li>
               <li>
-                <a
-                  data-testid="next-link"
-                  className=""
-                  href="/ru-ru/challenges/"
-                >
+                <a data-testid="next-link" className="" href="#">
                   <svg
                     data-indicator="true"
                     className=""
@@ -131,7 +119,7 @@ export const Header: React.FC<{
                 </a>
               </li>
               <li>
-                <a data-testid="next-link" className="" href="/ru-ru/videos/">
+                <a data-testid="next-link" className="" href="#">
                   <svg
                     data-indicator="true"
                     className=""
@@ -146,7 +134,7 @@ export const Header: React.FC<{
                 </a>
               </li>
               <li>
-                <a data-testid="next-link" className="" href="/ru-ru/blog/">
+                <a data-testid="next-link" className="" href="#">
                   <svg
                     data-indicator="true"
                     className=""
@@ -166,7 +154,7 @@ export const Header: React.FC<{
         <a
           data-testid="next-link"
           className="button text__color-white"
-          href="/ru-ru/license/"
+          href="#"
         >
           <span className={isSearchPage ? ' black-color ' : ' white-color '}>
             License
@@ -201,7 +189,7 @@ export const Header: React.FC<{
           id="upload-link"
           data-testid="next-link"
           className="button_white-color button clicable-icon"
-          href="/ru-ru/upload/"
+          href="#"
         >
           <svg
             className={`upload-link_icon ${isSearchPage ? ' black-color ' : ' white-color '}`}
@@ -229,7 +217,7 @@ export const Header: React.FC<{
           id="loading-link"
           data-testid="next-link"
           className={`${isSearchPage ? ' black-color ' : ' white-color '} button`}
-          href="/ru-ru/upload/"
+          href="#"
         >
           <span className="">Loading</span>
         </a>

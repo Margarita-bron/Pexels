@@ -14,24 +14,16 @@ export const DataTable: React.FC<{ totalResult: number }> = ({
       <a
         data-testid="next-link"
         className="data-table-tab data-table-tab_active"
-        href="/ru-ru/search/new/"
+        href="#"
       >
         Photo
         <span className="tab_number">{totalNumber}</span>
       </a>
-      <a
-        data-testid="next-link"
-        className="data-table-tab"
-        href="/ru-ru/search/new/"
-      >
+      <a data-testid="next-link" className="data-table-tab" href="#">
         Video
         <span className="tab_number">0</span>
       </a>
-      <a
-        data-testid="next-link"
-        className="data-table-tab"
-        href="/ru-ru/search/new/"
-      >
+      <a data-testid="next-link" className="data-table-tab" href="#">
         Users
         <span className="tab_number">0</span>
       </a>
