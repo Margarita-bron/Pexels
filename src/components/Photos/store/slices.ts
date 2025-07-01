@@ -42,7 +42,7 @@ export const photoAPI = baseApi.injectEndpoints({
         method: 'PATCH',
         body: patch,
       }),
-      invalidatesTags: (result, error) => (error ? [] : [TagType.Photo]),
+      invalidatesTags: (error) => (error ? [] : [TagType.Photo]),
     }),
     searchPhotos: build.query<PexelsResponse, ISearchParameters>({
       query: ({
