@@ -1,0 +1,187 @@
+.photos-wrapper {
+  max-width: 1540px;
+  max-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.photo-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.photo {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.2) 0%,
+    rgba(0,0,0,0) 30%,
+    rgba(0,0,0,0) 70%,
+    rgba(0,0,0,0.2) 100%
+  );
+  border-radius: inherit;
+  transition: opacity 0.25s;
+  border-radius: 12px;
+}
+
+@media (max-width: 654px) {
+  .photos-wrapper {
+    gap: 12px;
+  }
+    .photo-column {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .photos-wrapper {
+    gap: 12px;
+  }
+  .photo-column {
+    gap: 12px;
+  }
+}
+
+.spinner-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.catalog{
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-img{
+  position: relative;
+  box-sizing: content-box;
+  overflow: hidden;
+}
+
+.photo-img:not(:hover) .lower-media_overlay {
+  bottom: -24px;
+   transition:bottom 0.25s, ;
+}
+
+.photo-img:not(:hover) .upper-media_overlay {
+  right: -49px;
+}
+
+.lower-media_overlay, .upper-media_overlay{
+  bottom: 0;
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    padding: 12px;
+
+    box-sizing: border-box;
+  position: absolute;
+  flex-direction: row;
+
+  pointer-events: all;
+    margin-left: auto;
+}
+
+.lower-media_overlay{
+  opacity: 1;
+  transition: bottom 0.25s;
+  bottom: 0px;
+}
+
+.upper-media_overlay{
+  top: 0;
+  right: 0px;
+  transition: 0.25s;
+  justify-content: end;
+  height: fit-content;
+  opacity: 1;
+}
+
+.photo-img:not(:hover) [data-hoveronly=true] {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s easy;
+}
+
+.upper-media_overlay  > * {
+    color: #fff;
+    background: transparent;
+    border: none;
+}
+
+.media-button:hover {
+    background: rgba(0, 0, 0, .4);
+    border-color: rgba(0, 0, 0, .4);
+}
+
+.media-button{
+      width: 45px;
+    max-height: 45px;
+}
+
+.download-button{
+  margin-left: auto;
+    border: 0;
+    border-radius: 10px;
+
+    padding: 0 20px;
+
+            color: #fff;
+        background: #54ca84;
+        border-color: #54ca84;
+        width: auto;
+        height: 50px;
+}
+
+.download-button:hover {
+        background: #32ac64;
+        border-color: #32ac64;
+    }
+@media (min-width: 901px) {
+    .download-icon {
+        fill: #fff;
+        width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    transition: fill .1s, transform .2s ease-in-out;
+    }
+}
+.download-button-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.photographer-link{
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+}
+.button_color-strawberry{
+    color: #fff;
+    background: #ff3a78;
+    border-color: #ff3a78;
+}
+
+.media-button .button_color-strawberry:hover {
+     background: #db255f;
+    border-color: #db255f;
+}
+
+.photo-img:not(:hover):has(.button_color-strawberry) .upper-media_overlay {
+  right: 0;
+}

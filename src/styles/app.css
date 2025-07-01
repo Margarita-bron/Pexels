@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+h1 {
+  margin: 0;
+}
+
+h2{
+  font-size: 36px;
+    line-height: 130%;
+    letter-spacing: -2px;
+}
+
+a{
+  text-decoration: none;
+}
+
+span{
+  font-family: var(--font-family);
+  font-size: 17px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
