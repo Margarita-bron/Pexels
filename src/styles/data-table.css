@@ -1,0 +1,56 @@
+.data-table-tab{
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 20px;
+    color: #4a4a4a;
+    border-radius: 30px;
+        font-size: 17px;
+    line-height: 150%;
+    letter-spacing: -.5px;
+    background-color: transparent;
+    box-sizing:border-box;
+    outline: none;
+    transition: .25s ease;
+
+    font-weight: 500;
+
+    margin-right: 10px;
+}
+
+.tab_number{
+  display: inline-block;
+    margin-bottom: -1px;
+    margin-left: 8px;
+    font-size: 14px;
+    color: #bfbfbf;
+    transition: .25s ease;
+}
+
+.data-table-tab_active{
+      color: #fff;
+    background: #000;
+    border: 1px solid transparent;
+}
+
+.data-table-tab:hover{
+      color: #000;
+    background: #f7f7f7;
+    outline: none;
+}
+
+.data-table-tab_active .tab_number{
+  color: #7f7f7f;
+}
+
+.data-table-tab:hover .tab_number{
+  color: #7f7f7f;
+}
+.data-table-tab_active:hover{
+  color: #fff;
+    background-color: #191919;
+}
+
+.data-users-wrapper{
+  justify-self: flex-start;
+}
