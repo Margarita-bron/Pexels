@@ -35,12 +35,8 @@ export const Photos: React.FC<{
 
   useEffect(() => {
     setPage(1);
-  }, [search]);
-
-  useEffect(() => {
-    setPage(1);
     setAllPhotos([]);
-  }, [filters]);
+  }, [search, filters]);
 
   const searchParameters = useMemo<ISearchParameters>(() => {
     return { query: search, page, per_page: PER_PAGE, ...filters };
@@ -70,6 +66,7 @@ export const Photos: React.FC<{
     error: searchError,
   } = useSearchPhotosQuery(searchParameters, {
     skip: search.trim() === '',
+    keepUnusedDataFor: 10,
   });
 
   const photos =
@@ -109,10 +106,17 @@ export const Photos: React.FC<{
   useEffect(() => {
     if (photos.length === 0) return;
 
+    const getSizeForPhoto = (): keyof IPhotoSize => {
+      if (filters.orientation === 'portrait') {
+        return 'portrait';
+      }
+      return sizeOptions[Math.floor(Math.random() * sizeOptions.length)];
+    };
+
     if (page === 1) {
       const photosWithSize = photos.map((p) => ({
         ...p,
-        size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
+        size: getSizeForPhoto(),
       }));
       setAllPhotos(photosWithSize);
     } else {
@@ -121,7 +125,7 @@ export const Photos: React.FC<{
           .filter((p) => !previous.some((previous_) => previous_.id === p.id))
           .map((p) => ({
             ...p,
-            size: sizeOptions[Math.floor(Math.random() * sizeOptions.length)],
+            size: getSizeForPhoto(),
           }));
         return [...previous, ...newPhotos];
       });

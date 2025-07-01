@@ -1,13 +1,13 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/index';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 export const Header: React.FC<{
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ search, setSearch }) => {
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ search, setSearch, setClicked }) => {
   const location = useLocation();
   const isSearchPage = location.pathname.startsWith('/search');
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ export const Header: React.FC<{
 
   const handleNavigate = (): void => {
     setSearch('');
+    setClicked(true);
     void navigate('/');
   };
 

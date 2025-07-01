@@ -14,14 +14,14 @@ export const SearchPage: React.FC<{
   const query = searchParameters.get('query') ?? '';
 
   React.useEffect(() => {
-    if (query !== search) {
+    if (query !== search && location.pathname.startsWith('/search')) {
       setSearch(query);
     }
-  }, [query, search, setSearch]);
+  }, [query, search, setSearch, location.pathname]);
 
   return (
     <div className="container">
-      <Header search={search} setSearch={setSearch} />
+      <Header search={search} setSearch={setSearch} setClicked={setClicked} />
       <Catalog
         search={search}
         setSearch={setSearch}

@@ -10,10 +10,41 @@ export const SearchBar: React.FC<{
 }> = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState(search);
+  const [debouncedValue, setDebouncedValue] = useState(search);
 
   React.useEffect(() => {
     setInputValue(search);
   }, [search]);
+
+  React.useEffect(() => {
+    if (inputValue.trim() === '') {
+      setDebouncedValue('');
+      return;
+    }
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue.trim());
+    }, 3000);
+
+    return (): void => {
+      clearTimeout(handler);
+    };
+  }, [inputValue]);
+
+  React.useEffect(() => {
+    if (debouncedValue !== '') {
+      setSearch(debouncedValue);
+      void navigate(`/search?query=${encodeURIComponent(debouncedValue)}`);
+    }
+  }, [debouncedValue, setSearch, navigate]);
+
+  React.useEffect(() => {
+    if (search === '') {
+      setInputValue('');
+      setDebouncedValue('');
+    } else {
+      setInputValue(search);
+    }
+  }, [setSearch]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(event.target.value);
@@ -24,6 +55,7 @@ export const SearchBar: React.FC<{
     setSearch(inputValue.trim());
     if (inputValue.trim() !== '') {
       void navigate(`/search?query=${encodeURIComponent(inputValue.trim())}`);
+      setDebouncedValue(inputValue.trim());
     }
   };
 

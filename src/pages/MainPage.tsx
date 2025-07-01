@@ -11,11 +11,16 @@ export const MainPage: React.FC<{
 }> = ({ filters, search, setSearch, setFilters, setClicked }) => {
   useEffect(() => {
     setSearch('');
-  }, [setSearch]);
+    setFilters({
+      orientation: '',
+      size: '',
+      color: '',
+    });
+  }, [setSearch, setFilters]);
 
   return (
     <div className="container">
-      <Header search={search} setSearch={setSearch} />
+      <Header search={search} setSearch={setSearch} setClicked={setClicked} />
       <HeaderContent search={search} setSearch={setSearch} filters={filters} />
       <Catalog
         search={search}
